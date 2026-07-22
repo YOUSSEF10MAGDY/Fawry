@@ -18,17 +18,19 @@ public class Main {
 
         while (isRunning) {
             System.out.println("\n=== Library Management System ===");
-            System.out.println("1. Add a Book");
-            System.out.println("2. Remove a Book");
-            System.out.println("3. List Books (Sorted Alphabetically)");
-            System.out.println("4. Add a Member");
-            System.out.println("5. List Members");
-            System.out.println("6. Borrow a Book");
-            System.out.println("7. Return a Book");
-            System.out.println("8. Search Book by Title");
-            System.out.println("9. Search Book by Author");
-            System.out.println("10. Search Book by Category");
-            System.out.println("11. Show Statistics");
+            System.out.println("1. Add a book");
+            System.out.println("2. Remove a   book");
+            System.out.println("3. update book ");
+            System.out.println("4. List books (Sorted Alphabetically)");
+            System.out.println("5. Add a Member");
+            System.out.println("6. remove a Member");
+            System.out.println("7. List Members");
+            System.out.println("8. Borrow a book");
+            System.out.println("9. Return a bbook");
+            System.out.println("10. Search book by Title");
+            System.out.println("11. Search book by Author");
+            System.out.println("12. Search book by Category");
+            System.out.println("13. Show Statistics");
             System.out.println("0. Exit");
             System.out.print("Enter your choice: ");
 
@@ -147,7 +149,7 @@ public class Main {
                         break;
 
 
-                    case 10:
+                    case 12:
                         System.out.print("Enter Category to search: ");
                         String searchCategory = scanner.nextLine();
 
@@ -165,7 +167,7 @@ public class Main {
                         break;
 
 
-                    case 11:
+                    case 13:
                         service.printStatistics();
                         break;
 
