@@ -114,7 +114,7 @@ public class LibraryService implements Searchable {
     public List<Book> searchByTitle(String title) {
         List<Book> result = new ArrayList<>();
         for (Book book : library.getBooks()) {
-            if (book.getTitle().toLowerCase().trim().contains(title.toLowerCase().trim())) {
+            if (book.getTitle().toLowerCase().contains(title.toLowerCase())) {
                 result.add(book);
             }
         }
