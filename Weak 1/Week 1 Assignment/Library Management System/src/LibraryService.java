@@ -9,7 +9,6 @@ public class LibraryService implements Searchable {
         this.library = library;
     }
 
-//    Prevent Duplicate IDs ******************************
 
     public void addBook(Book newbook) {
         if(newbook.getId()<=0){
