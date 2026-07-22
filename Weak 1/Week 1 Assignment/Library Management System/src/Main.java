@@ -58,18 +58,26 @@ public class Main {
 
                     case 2:
                         System.out.print("Enter Book ID to remove: ");
-                        int removeId = scanner.nextInt();
-                        service.removeBook(removeId);
+                        int bId = scanner.nextInt();
+                        service.removeBook(bId);
                         break;
-
                     case 3:
+                        System.out.print("Enter Book id to update: ");
+                        int upid =scanner.nextInt();
+                        System.out.print("Enter updatedTitle: ");
+                        String uptitle = scanner.nextLine();
+                        System.out.print("Enter a number of Copies: ");
+                        int upcopies = scanner.nextInt();
+
+                        service.updateBook(upid,uptitle,upcopies);
+                    case 4:
                         System.out.println("\nList of Books (Sorted Alphabetically):");
                         List<Book> books = library.getBooks();
                         books.sort((b1, b2) -> b1.getTitle().compareToIgnoreCase(b2.getTitle())); // Lambda Sorting
                         service.listbooks();
                         break;
 
-                    case 4:
+                    case 5:
                         System.out.print("Enter Member ID: ");
                         int memberId = scanner.nextInt();
                         scanner.nextLine();
@@ -81,13 +89,17 @@ public class Main {
                         Person newMember = new Member(memberId, name, email);
                         service.addMember((Member) newMember);
                         break;
+                    case 6:
+                        System.out.print("Enter member id to remove: ");
+                        int mId = scanner.nextInt();
+                        service.removeMember(mId);
 
-                    case 5:
+                    case 7:
                         System.out.println("\nList of Members:");
                         service.listmember();
                         break;
 
-                    case 6:
+                    case 8:
                         System.out.print("Enter Member ID: ");
                         int bMemberId = scanner.nextInt();
                         System.out.print("Enter Book ID: ");
@@ -95,20 +107,20 @@ public class Main {
                         service.borrowBook(bMemberId, bBookId);
                         break;
 
-                    case 7:
+                    case 9:
                         System.out.print("Enter Book ID to return: ");
                         int rBookId = scanner.nextInt();
                         service.returnBook(rBookId);
                         break;
 
-                    case 8:
+                    case 10:
                         System.out.print("Enter Title to search: ");
                         String searchTitle = scanner.nextLine();
 
                         List<Book> foundBooks = service.searchByTitle(searchTitle);
 
                         if (foundBooks.isEmpty()) {
-                            System.out.println("No books found with that title.");
+                            System.out.println("No books found with that title");
                         } else {
                             System.out.println("\nSearch Results:");
                             for (Book b : foundBooks) {
@@ -118,13 +130,13 @@ public class Main {
                         break;
 
 
-                    case 9:
+                    case 11:
                         System.out.print("Enter Author to search: ");
                         String searchAuthor = scanner.nextLine();
                         List<Book> authorBooks = service.searchByAuthor(searchAuthor);
 
                         if (authorBooks.isEmpty()) {
-                            System.out.println("No books found for that author.");
+                            System.out.println("No books found for that author");
                         } else {
 
                             System.out.println("\nSearch Results:");
@@ -142,7 +154,7 @@ public class Main {
                         List<Book> categoryBooks = service.searchByCategory(searchCategory);
 
                         if (categoryBooks.isEmpty()) {
-                            System.out.println("No books found in that category.");
+                            System.out.println("No books found in that category");
                         } else {
 
                             System.out.println("\nSearch Results:");
@@ -159,14 +171,14 @@ public class Main {
 
 
                     case 0:
-                        System.out.println("Exiting System. Goodbye!");
+                        System.out.println("Exiting System........");
                         isRunning = false;
                         break;
 
                     default:
                         System.out.println(" Invalid choice. Please enter a number between 0 and 11.");                }
             } catch (InputMismatchException e) {
-                System.out.println("Invalid input! Please enter numbers only where expected. System recovered without crashing.");
+                System.out.println("Invalid input Please enter numbers only where expected. System recovered without crashing.");
                 scanner.nextLine();
             } catch (Exception e) {
                 System.out.println("An unexpected error occurred: " + e.getMessage());
