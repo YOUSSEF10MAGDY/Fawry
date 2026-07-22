@@ -3,9 +3,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class Library {
-    private ArrayList<Book> books;
-    private HashMap<Integer,Member> members;
-    private HashSet<String> categories;
+    private final ArrayList<Book> books;
+    private final HashMap<Integer,Member> members;
+    private final HashSet<String> categories;
 
     public Library() {
         books = new ArrayList<>();

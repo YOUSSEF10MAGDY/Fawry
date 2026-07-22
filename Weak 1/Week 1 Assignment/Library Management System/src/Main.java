@@ -17,7 +17,7 @@ public class Main {
 
 
         while (isRunning) {
-            System.out.println("\n=== 📚 Library Management System ===");
+            System.out.println("\n=== Library Management System ===");
             System.out.println("1. Add a Book");
             System.out.println("2. Remove a Book");
             System.out.println("3. List Books (Sorted Alphabetically)");
