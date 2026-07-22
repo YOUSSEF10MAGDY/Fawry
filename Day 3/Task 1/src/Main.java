@@ -9,7 +9,7 @@ void main() {
     for (int i = 0; i < Students.size(); i++) {
         System.out.println(Students.get(i));
     }
-    if(Students.equals("Sara")){
+    if(Students.contains("Sara")){
         System.out.println("true");
     }else {
         System.out.println("false");
