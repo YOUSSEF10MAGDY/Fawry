@@ -26,7 +26,7 @@ public class LibraryService implements Searchable {
             }
             library.getBooks().add(newbook);
             library.getCategories().add(newbook.getCategory());
-            System.out.println("Book added successfully!");
+            System.out.println("Book added ");
 
     }
 
@@ -52,13 +52,13 @@ public class LibraryService implements Searchable {
                 return;
             }
         }
-        System.out.println("Book not found");
+        System.out.println("NO books");
     }
 
 
     public void listbooks() {
         if (library.getBooks().isEmpty()) {
-            System.out.println("The library has no books");
+            System.out.println("no books");
             return;
         }
         for (Book book : library.getBooks()) {
