@@ -30,7 +30,7 @@ public class Main {
             System.out.println("10. Search Book by Category");
             System.out.println("11. Show Statistics");
             System.out.println("0. Exit");
-            System.out.print("👉 Enter your choice: ");
+            System.out.print("Enter your choice: ");
 
             try {
                 int choice = scanner.nextInt();
@@ -63,7 +63,7 @@ public class Main {
                         break;
 
                     case 3:
-                        System.out.println("\n📋 List of Books (Sorted Alphabetically):");
+                        System.out.println("\nList of Books (Sorted Alphabetically):");
                         List<Book> books = library.getBooks();
                         books.sort((b1, b2) -> b1.getTitle().compareToIgnoreCase(b2.getTitle())); // Lambda Sorting
                         service.listbooks();
@@ -83,7 +83,7 @@ public class Main {
                         break;
 
                     case 5:
-                        System.out.println("\n📋 List of Members:");
+                        System.out.println("\nList of Members:");
                         service.listmember();
                         break;
 
@@ -108,9 +108,9 @@ public class Main {
                         List<Book> foundBooks = service.searchByTitle(searchTitle);
 
                         if (foundBooks.isEmpty()) {
-                            System.out.println("❌ No books found with that title.");
+                            System.out.println("No books found with that title.");
                         } else {
-                            System.out.println("\n🔍 Search Results:");
+                            System.out.println("\nSearch Results:");
                             for (Book b : foundBooks) {
                                 System.out.println(b);
                             }
@@ -124,10 +124,10 @@ public class Main {
                         List<Book> authorBooks = service.searchByAuthor(searchAuthor);
 
                         if (authorBooks.isEmpty()) {
-                            System.out.println("❌ No books found for that author.");
+                            System.out.println("No books found for that author.");
                         } else {
 
-                            System.out.println("\n🔍 Search Results:");
+                            System.out.println("\nSearch Results:");
                             for (Book b : authorBooks) {
                                 System.out.println(b);
                             }
@@ -142,10 +142,10 @@ public class Main {
                         List<Book> categoryBooks = service.searchByCategory(searchCategory);
 
                         if (categoryBooks.isEmpty()) {
-                            System.out.println("❌ No books found in that category.");
+                            System.out.println("No books found in that category.");
                         } else {
 
-                            System.out.println("\n🔍 Search Results:");
+                            System.out.println("\nSearch Results:");
                             for (Book b : categoryBooks) {
                                 System.out.println(b);
                             }
@@ -159,17 +159,17 @@ public class Main {
 
 
                     case 0:
-                        System.out.println("👋 Exiting System. Goodbye!");
+                        System.out.println("Exiting System. Goodbye!");
                         isRunning = false;
                         break;
 
                     default:
-                        System.out.println("⚠️ Invalid choice. Please enter a number between 0 and 11.");                }
+                        System.out.println(" Invalid choice. Please enter a number between 0 and 11.");                }
             } catch (InputMismatchException e) {
-                System.out.println("⚠️ Invalid input! Please enter numbers only where expected. System recovered without crashing.");
+                System.out.println("Invalid input! Please enter numbers only where expected. System recovered without crashing.");
                 scanner.nextLine();
             } catch (Exception e) {
-                System.out.println("⚠️ An unexpected error occurred: " + e.getMessage());
+                System.out.println("An unexpected error occurred: " + e.getMessage());
             }
         }
 

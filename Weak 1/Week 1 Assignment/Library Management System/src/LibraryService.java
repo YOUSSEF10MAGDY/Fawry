@@ -160,7 +160,7 @@ public class LibraryService implements Searchable {
     }
     public void borrowBook(int memberid, int bookid) {
         if (!library.getMembers().containsKey(memberid)) {
-            System.out.println("❌ Member not found!");
+            System.out.println("Member not found!");
             return;
         }
 
@@ -168,26 +168,26 @@ public class LibraryService implements Searchable {
             if (book.getId() == bookid) {
                 if (book.getAvailableCopies() > 0) {
                     book.decreaseCopies();
-                    System.out.println("✅ Book borrowed successfully by member: " + memberid);
+                    System.out.println("Book borrowed successfully by member: " + memberid);
                 } else {
-                    System.out.println("⚠️ No available copies for this book right now.");
+                    System.out.println("No available copies for this book right now.");
                 }
                 return;
 
             }
         }
-        System.out.println("❌ Book not found!");
+        System.out.println("Book not found!");
     }
 
     public void returnBook(int bookId) {
         for (Book book : library.getBooks()) {
             if (book.getId() == bookId) {
                 book.increaseCopies();
-                System.out.println("✅ Book returned successfully!");
+                System.out.println("Book returned successfully!");
                 return;
             }
         }
-        System.out.println("❌ Book not found!");
+        System.out.println("Book not found!");
     }
 
 }

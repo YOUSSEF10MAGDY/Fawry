@@ -51,7 +51,7 @@ public class Book {
     public void setId(int id) {
 
         if(id<=0){
-            System.out.println("Invalid ID.");
+            System.out.println("Invalid ID");
             return;
         }
         this.id = id;
@@ -64,7 +64,7 @@ public class Book {
     public void setTitle(String title) {
         if(title.isBlank()){
 
-        System.out.println("Invalid title.");
+        System.out.println("Invalid title");
 
         return;
 
@@ -94,7 +94,7 @@ public class Book {
 
     public void setAvailableCopies(int availableCopies) {
         if(availableCopies<0) {
-            System.out.println("Invalid copies.");
+            System.out.println("Invalid copies");
             return;
         }
             this.availableCopies = availableCopies;
