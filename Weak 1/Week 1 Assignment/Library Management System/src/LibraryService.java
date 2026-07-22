@@ -13,7 +13,7 @@ public class LibraryService implements Searchable {
 
     public void addBook(Book newbook) {
         if(newbook.getId()<=0){
-            System.out.println("Invalid ID.");
+            System.out.println("Invalid ID");
             return;
 
         }
@@ -26,7 +26,7 @@ public class LibraryService implements Searchable {
             }
             library.getBooks().add(newbook);
             library.getCategories().add(newbook.getCategory());
-            System.out.println("✅ Book added successfully!");
+            System.out.println("Book added successfully!");
 
     }
 
@@ -48,17 +48,17 @@ public class LibraryService implements Searchable {
                 if (!found) {
                     library.getCategories().remove(category);
                 }
-                System.out.println("Book removed.");
+                System.out.println("Book removed");
                 return;
             }
         }
-        System.out.println("Book not found.");
+        System.out.println("Book not found");
     }
 
 
     public void listbooks() {
         if (library.getBooks().isEmpty()) {
-            System.out.println("The library has no books.");
+            System.out.println("The library has no books");
             return;
         }
         for (Book book : library.getBooks()) {
@@ -71,38 +71,38 @@ public class LibraryService implements Searchable {
             if (book.getId() == bookid) {
                 book.setTitle(newTitle);
                 book.setAvailableCopies(newCopies);
-                System.out.println("✅ Book updated successfully!");
+                System.out.println("Book updated successfully!");
                 return;
             }
         }
-        System.out.println("❌ Book not found!");
+        System.out.println("Book not found!");
     }
 
     public void addMember(Member member) {
         if(member.getId()<=0){
-            System.out.println("Invalid ID.");
+            System.out.println("Invalid ID");
             return;
         }
 
         if (library.getMembers().containsKey(member.getId())) {
-            System.out.println("⚠️ Member ID already exists!");
+            System.out.println("Member ID already exists!");
         } else {
             library.getMembers().put(member.getId(), member);
-            System.out.println("✅ Member added successfully!");
+            System.out.println("Member added successfully!");
         }
     }
 
     public void removeMember(int memberid) {
         if (library.getMembers().remove(memberid) != null) {
-            System.out.println("🗑️ Member removed successfully!");
+            System.out.println("Member removed successfully!");
         } else {
-            System.out.println("❌ Member not found!");
+            System.out.println("Member not found!");
         }
     }
 
     public void listmember() {
         if (library.getMembers().isEmpty()) {
-            System.out.println("No members found.");
+            System.out.println("No members found");
             return;
         }
 
