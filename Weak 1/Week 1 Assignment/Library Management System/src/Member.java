@@ -5,7 +5,7 @@ public class Member extends Person{
         super(name,email);
 
         if(id<=0) {
-            throw new IllegalArgumentException("Invalid ID.");
+            throw new IllegalArgumentException("Invalid ID");
         }
         this.id=id;
 

@@ -10,20 +10,20 @@ public class Book {
                 String category,int availableCopies){
 
         if(id<=0) {
-            throw new IllegalArgumentException("Invalid ID.");
+            throw new IllegalArgumentException("Invalid ID");
         }
         if(author.isBlank()) {
-            throw new IllegalArgumentException("Invalid author.");
+            throw new IllegalArgumentException("Invalid author");
         }
 
         if(category.isBlank()) {
-            throw new IllegalArgumentException("Invalid category.");
+            throw new IllegalArgumentException("Invalid category");
         }
         if(title.isBlank()) {
-            throw new IllegalArgumentException("Invalid title.");
+            throw new IllegalArgumentException("Invalid title");
         }
         if(availableCopies<0) {
-            throw new IllegalArgumentException("Invalid copies.");
+            throw new IllegalArgumentException("Invalid copies");
         }
         this.id=id;
         this.title=title;
