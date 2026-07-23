@@ -77,7 +77,7 @@ public class Main {
                     case 4:
                         System.out.println("\nList of Books (Sorted Alphabetically):");
                         List<Book> books = library.getBooks();
-                        books.sort((b1, b2) -> b1.getTitle().compareToIgnoreCase(b2.getTitle())); // Lambda Sorting
+                        books.sort((b1, b2) -> b1.getTitle().compareToIgnoreCase(b2.getTitle()));
                         service.listbooks();
                         break;
 
