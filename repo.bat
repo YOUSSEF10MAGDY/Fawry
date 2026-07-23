@@ -6,7 +6,7 @@ git commit -m "Initial commit"
 
 git branch -M main
 
-git remote add origin https://github.com/YOUSSEF10MAGDY/Fawry-internship.git
+git remote add origin git@github.com:YOUSSEF10MAGDY/Fawry-internship.git
 
 git push -u origin main
 pause
