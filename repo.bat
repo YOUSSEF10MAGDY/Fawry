@@ -6,7 +6,7 @@ git commit -m "Initial commit"
 
 git branch -M main
 
-git remote add origin 
+git remote add origin https://github.com/YOUSSEF10MAGDY/Fawy.git
 
 git push -u origin main
 pause
