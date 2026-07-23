@@ -70,8 +70,10 @@ public class Main {
                         String uptitle = scanner.nextLine();
                         System.out.print("Enter a number of Copies: ");
                         int upcopies = scanner.nextInt();
-
                         service.updateBook(upid,uptitle,upcopies);
+                        break;
+
+
                     case 4:
                         System.out.println("\nList of Books (Sorted Alphabetically):");
                         List<Book> books = library.getBooks();
@@ -87,14 +89,15 @@ public class Main {
                         String name = scanner.nextLine();
                         System.out.print("Enter Member Email: ");
                         String email = scanner.nextLine();
-
                         Person newMember = new Member(memberId, name, email);
                         service.addMember((Member) newMember);
                         break;
+
                     case 6:
                         System.out.print("Enter member id to remove: ");
                         int mId = scanner.nextInt();
                         service.removeMember(mId);
+                        break;
 
                     case 7:
                         System.out.println("\nList of Members:");
