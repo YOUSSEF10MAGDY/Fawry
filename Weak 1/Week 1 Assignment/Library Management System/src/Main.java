@@ -3,18 +3,22 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args)  {
 
         Library library = new Library();
         LibraryService service = new LibraryService(library);
         Scanner scanner = new Scanner(System.in);
         boolean isRunning = true;
 
+try {
+    service.addBook(new Book(101, "Java Basics", "John", "Programming", 3));
+    service.addBook(new Book(102, "Algorithms", "Sara", "Computer Science", 2));
+    service.addMember(new Member(1, "Ahmed", "ahmed@email.com"));
 
-        service.addBook(new Book(101, "Java Basics", "John", "Programming", 3));
-        service.addBook(new Book(102, "Algorithms", "Sara", "Computer Science", 2));
-        service.addMember(new Member(1, "Ahmed", "ahmed@email.com"));
 
+} catch (InvalidInputException | DuplicateIdException e) {
+    System.out.println("Startup data error: " + e.getMessage());
+}
 
         while (isRunning) {
             System.out.println("\n=== Library Management System ===");
@@ -185,7 +189,8 @@ public class Main {
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input Please enter numbers only where expected. System recovered without crashing.");
                 scanner.nextLine();
-            } catch (Exception e) {
+            } catch (BookNotFoundException | MemberNotFoundException | DuplicateIdException
+                     | InvalidInputException | NoCopiesAvailableException e) {
                 System.out.println("An unexpected error occurred: " + e.getMessage());
             }
         }

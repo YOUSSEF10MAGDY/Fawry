@@ -10,17 +10,16 @@ public class LibraryService implements Searchable {
     }
 
 
-    public void addBook(Book newbook) {
+    public void addBook(Book newbook)throws InvalidInputException, DuplicateIdException {
         if(newbook.getId()<=0){
-            System.out.println("Invalid ID");
-            return;
+            throw new InvalidInputException("Invalid ID");
+
 
         }
             for (Book book : library.getBooks()) {
 
                 if (book.getId() == newbook.getId()) {
-                    System.out.println("ID Exists");
-                    return;
+                    throw new DuplicateIdException("Book", newbook.getId());
                 }
             }
             library.getBooks().add(newbook);
@@ -29,7 +28,7 @@ public class LibraryService implements Searchable {
 
     }
 
-    public void removeBook ( int bookId) {
+    public void removeBook ( int bookId)throws BookNotFoundException  {
 
         Iterator<Book> iterator = library.getBooks().iterator();
         while (iterator.hasNext()) {
@@ -51,7 +50,7 @@ public class LibraryService implements Searchable {
                 return;
             }
         }
-        System.out.println("NO book");
+        throw new BookNotFoundException(bookId);
     }
 
 
@@ -65,7 +64,7 @@ public class LibraryService implements Searchable {
         }
     }
 
-    public void updateBook(int bookid, String newTitle, int newCopies) {
+    public void updateBook(int bookid, String newTitle, int newCopies)throws BookNotFoundException {
         for (Book book : library.getBooks()) {
             if (book.getId() == bookid) {
                 book.setTitle(newTitle);
@@ -74,26 +73,26 @@ public class LibraryService implements Searchable {
                 return;
             }
         }
-        System.out.println("no book");
+        throw new BookNotFoundException(bookid);
     }
 
-    public void addMember(Member member) {
+    public void addMember(Member member)throws InvalidInputException, DuplicateIdException {
         if(member.getId()<=0){
-            System.out.println("Invalid ID");
-            return;
+            throw new InvalidInputException("Invalid ID");
+
         }
 
         if (library.getMembers().containsKey(member.getId())) {
-            System.out.println("Member ID already exists");
+            throw new DuplicateIdException("Member", member.getId());
         } else {
             library.getMembers().put(member.getId(), member);
             System.out.println("Member added successfully");
         }
     }
 
-    public void removeMember(int memberid) {
+    public void removeMember(int memberid) throws MemberNotFoundException{
         if (library.getMembers().remove(memberid) != null) {
-            System.out.println("Member removed successfully");
+            throw new MemberNotFoundException(memberid);
         } else {
             System.out.println("Member not found");
         }
@@ -157,10 +156,9 @@ public class LibraryService implements Searchable {
         System.out.println("Total Available Physical Copies: " + available);
         System.out.println("Categories available: " + library.getCategories().size());
     }
-    public void borrowBook(int memberid, int bookid) {
+    public void borrowBook(int memberid, int bookid) throws MemberNotFoundException, BookNotFoundException, NoCopiesAvailableException{
         if (!library.getMembers().containsKey(memberid)) {
-            System.out.println("Member not found");
-            return;
+            throw new MemberNotFoundException(memberid);
         }
 
         for (Book book : library.getBooks()) {
@@ -169,16 +167,17 @@ public class LibraryService implements Searchable {
                     book.decreaseCopies();
                     System.out.println("Book borrowed by member: " + memberid);
                 } else {
-                    System.out.println("No available copies for this book");
+                    throw new NoCopiesAvailableException(bookid);
                 }
                 return;
 
             }
         }
-        System.out.println("no Books ");
+        throw new BookNotFoundException(bookid);
+
     }
 
-    public void returnBook(int bookId) {
+    public void returnBook(int bookId) throws BookNotFoundException{
         for (Book book : library.getBooks()) {
             if (book.getId() == bookId) {
                 book.increaseCopies();
@@ -186,7 +185,7 @@ public class LibraryService implements Searchable {
                 return;
             }
         }
-        System.out.println("Book not found");
+        throw new BookNotFoundException(bookId);
     }
 
 }
