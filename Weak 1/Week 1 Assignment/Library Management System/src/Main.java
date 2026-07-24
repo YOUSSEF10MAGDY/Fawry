@@ -190,7 +190,7 @@ try {
                 System.out.println("Invalid input Please enter numbers only where expected. System recovered without crashing.");
                 scanner.nextLine();
             } catch (BookNotFoundException | MemberNotFoundException | DuplicateIdException
-                     | InvalidInputException | NoCopiesAvailableException e) {
+                     | InvalidInputException | NoCopiesAvailableException |IllegalArgumentException e) {
                 System.out.println("An unexpected error occurred: " + e.getMessage());
             }
         }
