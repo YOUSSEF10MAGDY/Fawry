@@ -2,7 +2,7 @@
 @echo off
 git init
 git add .
-git commit -m "Initial commit"
+git commit -m "Startup data exciption"
 
 git branch -M main
 
