@@ -113,7 +113,7 @@ public class LibraryService implements Searchable {
     public List<Book> searchByTitle(String title) {
         List<Book> result = new ArrayList<>();
         for (Book book : library.getBooks()) {
-            if (book.getTitle().toLowerCase().contains(title.toLowerCase())) {
+            if (book.getTitle().toLowerCase().trim().contains(title.toLowerCase().trim())) {
                 result.add(book);
             }
         }
@@ -123,7 +123,7 @@ public class LibraryService implements Searchable {
     public List<Book> searchByAuthor(String author) {
         List<Book> result = new ArrayList<>();
         for (Book book : library.getBooks()) {
-            if (book.getAuthor().toLowerCase().contains(author.toLowerCase())) {
+            if (book.getAuthor().toLowerCase().trim().contains(author.toLowerCase().trim())) {
                 result.add(book);
             }
         }
