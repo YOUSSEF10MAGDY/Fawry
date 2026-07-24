@@ -11,12 +11,12 @@ public class Main {
         boolean isRunning = true;
 
 try {
-    service.addBook(new Book(101, "Java Basics", "John", "Programming", 3));
+    service.addBook(new Book(101, "Java Basics", "John", " ", 3));
     service.addBook(new Book(102, "Algorithms", "Sara", "Computer Science", 2));
     service.addMember(new Member(1, "Ahmed", "ahmed@email.com"));
 
 
-} catch (InvalidInputException | DuplicateIdException e) {
+} catch (InvalidInputException | DuplicateIdException |IllegalArgumentException e) {
     System.out.println("Startup data error: " + e.getMessage());
 }
 
