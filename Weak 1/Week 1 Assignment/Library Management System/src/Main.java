@@ -3,23 +3,32 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args)  {
+    public static void main(String[] args) {
 
         Library library = new Library();
         LibraryService service = new LibraryService(library);
         Scanner scanner = new Scanner(System.in);
         boolean isRunning = true;
-
-try {
-    service.addBook(new Book(101, "Java Basics", "John", " ", 3));
-    service.addBook(new Book(102, "Algorithms", "Sara", "Computer Science", 2));
-    service.addMember(new Member(1, "Ahmed", "ahmed@email.com"));
+        try {
 
 
-} catch (InvalidInputException | DuplicateIdException |IllegalArgumentException e) {
-    System.out.println("Startup data error: " + e.getMessage());
-}
+            service.addBook(new Book(101, "Java Basics", "John", "phy", 3));
 
+        } catch (IllegalArgumentException|InvalidInputException | DuplicateIdException e) {
+            System.out.println("Error :"+ e.getMessage());
+        }
+        try {
+            service.addBook(new Book(101, "Algorithms", "Youssef", "Computer Science", 2));
+        } catch (IllegalArgumentException|InvalidInputException | DuplicateIdException e) {
+            System.out.println("Error :"+ e.getMessage());
+        }
+        try {
+
+            service.addMember(new Member(101, "youssef", "ahmed@email.com"));
+
+        } catch (IllegalArgumentException|InvalidInputException | DuplicateIdException e) {
+            System.out.println("Error :"+ e.getMessage());
+        }
         while (isRunning) {
             System.out.println("\n=== Library Management System ===");
             System.out.println("1. Add a book");
@@ -45,7 +54,7 @@ try {
                 switch (choice) {
                     case 1:
                         System.out.print("Enter Book ID: ");
-                            int bookId = scanner.nextInt();
+                        int bookId = scanner.nextInt();
 
 
                         scanner.nextLine();
@@ -69,12 +78,12 @@ try {
                         break;
                     case 3:
                         System.out.print("Enter Book id to update: ");
-                        int upid =scanner.nextInt();
+                        int upid = scanner.nextInt();
                         System.out.print("Enter updatedTitle: ");
                         String uptitle = scanner.nextLine();
                         System.out.print("Enter a number of Copies: ");
                         int upcopies = scanner.nextInt();
-                        service.updateBook(upid,uptitle,upcopies);
+                        service.updateBook(upid, uptitle, upcopies);
                         break;
 
 
@@ -185,12 +194,13 @@ try {
                         break;
 
                     default:
-                        System.out.println(" Invalid choice. Please enter a number between 0 and 11.");                }
+                        System.out.println(" Invalid choice. Please enter a number between 0 and 11.");
+                }
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input Please enter numbers only where expected. System recovered without crashing.");
                 scanner.nextLine();
             } catch (BookNotFoundException | MemberNotFoundException | DuplicateIdException
-                     | InvalidInputException | NoCopiesAvailableException |IllegalArgumentException e) {
+                     | InvalidInputException | NoCopiesAvailableException | IllegalArgumentException e) {
                 System.out.println("An unexpected error occurred: " + e.getMessage());
             }
         }

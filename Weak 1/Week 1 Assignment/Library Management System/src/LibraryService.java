@@ -11,20 +11,20 @@ public class LibraryService implements Searchable {
 
 
     public void addBook(Book newbook)throws InvalidInputException, DuplicateIdException {
-        if(newbook.getId()<=0){
-            throw new InvalidInputException("Invalid ID");
 
 
-        }
-            for (Book book : library.getBooks()) {
+           if (newbook.getId() <= 0) {
+               throw new InvalidInputException("Invalid ID");
+           }
+           for (Book book : library.getBooks()) {
 
-                if (book.getId() == newbook.getId()) {
-                    throw new DuplicateIdException("Book", newbook.getId());
-                }
-            }
-            library.getBooks().add(newbook);
-            library.getCategories().add(newbook.getCategory());
-            System.out.println("Book added ");
+               if (book.getId() == newbook.getId()) {
+                   throw new DuplicateIdException("Book", newbook.getId());
+               }
+           }
+           library.getBooks().add(newbook);
+           library.getCategories().add(newbook.getCategory());
+           System.out.println("Book added ");
 
     }
 
@@ -77,6 +77,7 @@ public class LibraryService implements Searchable {
     }
 
     public void addMember(Member member)throws InvalidInputException, DuplicateIdException {
+
         if(member.getId()<=0){
             throw new InvalidInputException("Invalid ID");
 
@@ -88,6 +89,8 @@ public class LibraryService implements Searchable {
             library.getMembers().put(member.getId(), member);
             System.out.println("Member added successfully");
         }
+
+
     }
 
     public void removeMember(int memberid) throws MemberNotFoundException{
@@ -112,6 +115,7 @@ public class LibraryService implements Searchable {
     @Override
     public List<Book> searchByTitle(String title) {
         List<Book> result = new ArrayList<>();
+        
         for (Book book : library.getBooks()) {
             if (book.getTitle().toLowerCase().trim().contains(title.toLowerCase().trim())) {
                 result.add(book);
