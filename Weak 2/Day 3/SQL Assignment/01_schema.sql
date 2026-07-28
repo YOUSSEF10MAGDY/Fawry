@@ -22,3 +22,8 @@ CREATE TABLE orders (
     status VARCHAR2(20) NOT NULL,
      total_amount NUMBER(10,2) NOT NULL
 );
+CREATE TABLE sandbox_logs (
+                              log_id NUMBER PRIMARY KEY,
+                              log_message VARCHAR2(200) NOT NULL,
+                              created_at DATE NOT NULL
+);
