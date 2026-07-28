@@ -18,7 +18,7 @@ public class Main {
             System.out.println("Error :"+ e.getMessage());
         }
         try {
-            service.addBook(new Book(101, "Algorithms", "Youssef", "Computer Science", 2));
+            service.addBook(new Book(1, "Algorithms", "Youssef", "Computer Science", 5));
         } catch (IllegalArgumentException|InvalidInputException | DuplicateIdException e) {
             System.out.println("Error :"+ e.getMessage());
         }
