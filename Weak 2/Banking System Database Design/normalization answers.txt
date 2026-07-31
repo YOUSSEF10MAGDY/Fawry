@@ -1,0 +1,98 @@
+**********  1NF -->  Every column must contain a single atomic value
+
+In our original table, no cell holds more than one value, so
+the table is already atomic. The problem is that the whole row
+keeps repeating every time a new transaction happens for the same
+account. The solution is to define a
+composite key
+(Customer_ID, Account_ID, Transaction_ID)
+so each row becomes unique.
+
+_______________________________________________________
+
+**********  2NF -->
+We split the main table into its
+basic Entities
+so that every column depends on the full
+Primary Key, not just part of it.
+
+CUSTOMER------->    (Customer_ID), Customer_Name, National_ID, Phone
+BRANCH------->      Branch_Name, Bank_Name, Branch_Address
+ACCOUNT------->    (Account_ID), Account_Type, Balance, Customer_ID, Branch_Name
+TRANSACTION------->    (Transaction_ID), Transaction_Type, Transaction_Amount, Account_ID
+LOAN------->    Loan_ID, Loan_Amount, (Customer_ID)
+
+The reason: Partial Dependency
+All these columns depend on only part of the composite key
+(for example, Customer_Name depends only on Customer_ID, not on
+Account_ID or Transaction_ID), not on the whole key together.
+This is called a
+Partial Dependency,
+and that's why we moved each group of columns to its own table,
+so the table becomes
+2NF
+(every non-key column depends on the whole key).
+
+_______________________________________________________
+
+**********  3NF -->
+In BRANCH, Branch_Address and Bank_Name were depending on
+Branch_Name, and Branch_Name itself is not the primary key
+of the table. This creates a
+Transitive Dependency
+(a non-key column depending on another non-key column instead of
+depending directly on the primary key). Also, using the name as
+a key is not reliable because names can repeat between different
+branches or change over time, and since one bank has many
+branches, Bank_Name would keep repeating for every branch.
+
+So we created a
+Branch_ID
+for each branch and a
+Bank_ID
+for each bank, and made Bank a separate table linked to Branch
+by a foreign key. This removes the transitive dependency and
+keeps every non-key column depending only on the primary key.
+
+Final form
+
+BANK      -------------->  (Bank_ID PK, Bank_Name --> UNIQUE)
+BRANCH    -------------->  (Branch_ID PK, Branch_Name, Branch_Address, Bank_ID FK)
+CUSTOMER  -------------->  (Customer_ID PK, Customer_Name, National_ID --> UNIQUE, Phone)
+ACCOUNT   -------------->  (Account_ID PK, Account_Type, Balance, Customer_ID FK, Branch_ID FK)
+TRANSACTION   --------------> (Transaction_ID PK, Transaction_Type, Transaction_Amount,
+            --------------> Transaction_Date, Account_ID FK)
+LOAN       --------------> (Loan_ID PK, Loan_Amount, Customer_ID FK)
+
+================
+  Final form of the tables
+=====================
+1. BANK
+   - Bank_ID (PK)
+   - Bank_Name (UNIQUE)
+2. BRANCH
+   - Branch_ID (PK)
+   - Branch_Name
+   - Branch_Address
+   - Bank_ID (FK)
+3. CUSTOMER
+   - Customer_ID (PK)
+   - Customer_Name
+   - National_ID (UNIQUE)
+   - Phone
+4. ACCOUNT
+   - Account_ID (PK)
+   - Account_Type
+   - Balance
+   - Customer_ID (FK)
+   - Branch_ID (FK)
+5. TRANSACTION
+   - Transaction_ID (PK)
+   - Transaction_Type
+   - Transaction_Amount
+   - Transaction_Date
+   - Account_ID (FK)
+6. LOAN
+   - Loan_ID (PK)
+   - Loan_Amount
+   - Customer_ID (FK)

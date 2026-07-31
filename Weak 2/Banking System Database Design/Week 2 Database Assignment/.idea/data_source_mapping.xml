@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourcePerFileMappings">
+    <file url="file://$PROJECT_DIR$/DDL.sql" value="07566ba7-c158-4eaf-81cc-e2de233f533d" />
+    <file url="file://$PROJECT_DIR$/DML.sql" value="07566ba7-c158-4eaf-81cc-e2de233f533d" />
+    <file url="file://$PROJECT_DIR$/Final Report.sql" value="07566ba7-c158-4eaf-81cc-e2de233f533d" />
+    <file url="file://$PROJECT_DIR$/Index explanation.sql" value="07566ba7-c158-4eaf-81cc-e2de233f533d" />
+    <file url="file://$PROJECT_DIR$/Transaction explanation.sql" value="07566ba7-c158-4eaf-81cc-e2de233f533d" />
+    <file url="file://$PROJECT_DIR$/VIEW SCRIPT.SQL" value="07566ba7-c158-4eaf-81cc-e2de233f533d" />
+    <file url="file://$PROJECT_DIR$/queries.SQL" value="07566ba7-c158-4eaf-81cc-e2de233f533d" />
+  </component>
+</project>
