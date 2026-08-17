@@ -1,0 +1,59 @@
+<div class="dashboard-grid">
+
+  <div class="appointments-section">
+    <h3>مواعيد اليوم </h3>
+    <input
+      [(ngModel)]="searchQuery"
+      class="search-input"
+      placeholder=" ابحث عن مريض..."
+      type="text">
+
+    <ul class="appointments-list">
+      @for (slot of filteredAppointments; track slot.time) {
+        <li>
+          <span class="patient-name">{{ slot.patientName }}</span>
+          <span class="time-badge">{{ slot.time }}</span>
+        </li>
+      } @empty {
+        <li class="empty-state">لا يوجد مرضى بهذا الاسم</li>
+      }
+    </ul>
+  </div>
+
+
+  <div class="booking-section">
+    <h3>حجز موعد جديد</h3>
+
+    <input [(ngModel)]="patientName" placeholder="اسم المريض..." type="text">
+    <p>الاسم: <strong class="highlight">{{ patientName }}</strong></p>
+
+    <div class="time-slots-container">
+      <p>اختر موعداً:</p>
+      <div class="slots-grid">
+        @for (slot of timeSlots; track slot.time) {
+          <button
+            (click)="selectTime(slot.time)"
+            [class.selected]="selectedTime === slot.time"
+            [disabled]="slot.isBooked"
+            class="slot-btn">
+            {{ slot.time }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <button
+      (click)="scheduleAppointment()"
+      [disabled]="!patientName || !selectedTime"
+      class="submit-btn">
+      حجز موعد
+    </button>
+
+    @if (showConfirmation) {
+      <div class="success-message">
+        تم حجز الموعد بنجاح
+      </div>
+    }
+  </div>
+
+</div>
