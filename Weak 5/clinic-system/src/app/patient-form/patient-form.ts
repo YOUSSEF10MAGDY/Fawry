@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component ,ChangeDetectorRef} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 interface TimeSlot {
@@ -17,7 +17,8 @@ export class PatientForm {
   patientName: string = '';
   selectedTime: string = '';
   showConfirmation: boolean = false;
-
+  private timeoutId: any;
+  constructor(private cdr: ChangeDetectorRef) {}
   searchQuery: string = '';
 
   timeSlots: TimeSlot[] = [
@@ -43,18 +44,42 @@ export class PatientForm {
   }
 
   scheduleAppointment() {
+    if (!this.patientName || this.patientName.trim().length === 0) {
+      alert('الرجاء إدخال اسم المريض');
+      return;
+    }
+
+    if (!this.selectedTime) {
+      alert('الرجاء اختيار موعد');
+      return;
+    }
+    const trimmedName = this.patientName.trim();
+    const isNameExists = this.timeSlots.some(
+      (slot) => slot.isBooked && slot.patientName === trimmedName);
+
+    if (isNameExists) {
+      alert(`عفواً، المريض "${trimmedName}" لديه موعد محجوز بالفعل اليوم.`);
+      this.patientName = '';
+      return;
+    }
     const slotIndex = this.timeSlots.findIndex((s) => s.time === this.selectedTime);
     if (slotIndex !== -1) {
       this.timeSlots[slotIndex].isBooked = true;
-      this.timeSlots[slotIndex].patientName = this.patientName;
+      this.timeSlots[slotIndex].patientName = this.patientName.trim();
     }
 
     this.showConfirmation = true;
+    this.patientName = '';
+    this.selectedTime = '';
 
-    setTimeout(() => {
+    if (this.timeoutId) {
+      clearTimeout(this.timeoutId);
+    }
+
+    this.timeoutId = setTimeout(() => {
       this.showConfirmation = false;
-      this.patientName = '';
-      this.selectedTime = '';
-    }, 3000);
+
+      this.cdr.detectChanges();
+    }, 2000);
   }
 }
