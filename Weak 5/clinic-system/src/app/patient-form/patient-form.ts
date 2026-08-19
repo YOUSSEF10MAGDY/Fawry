@@ -1,5 +1,13 @@
-import { Component ,ChangeDetectorRef} from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, ChangeDetectorRef, OnInit, inject } from '@angular/core';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators
+} from '@angular/forms';
+
+import { AppointmentService, Appointment } from './appointment';
 
 interface TimeSlot {
   time: string;
@@ -9,34 +17,51 @@ interface TimeSlot {
 
 @Component({
   selector: 'app-patient-form',
-  imports: [FormsModule],
+  imports: [FormsModule,ReactiveFormsModule],
   templateUrl: './patient-form.html',
   styleUrl: './patient-form.css',
 })
-export class PatientForm {
-  patientName: string = '';
-  selectedTime: string = '';
+export class PatientForm implements OnInit {
+  private fb = inject(FormBuilder);
+  private appointmentService = inject(AppointmentService);
+  private cdr = inject(ChangeDetectorRef);
+
+  bookingForm!: FormGroup;
 
   showConfirmation: boolean = false;
   showisNameExists: boolean = false;
   showNameisRequired: boolean = false;
 
-  private timeoutId: any;
-  constructor(private cdr: ChangeDetectorRef) {}
+  baseTimes = ['09:00 ص', '10:00 ص', '11:00 ص', '12:00 م', '01:00 م', '02:00 م'];
+  timeSlots: TimeSlot[] = [];
+
   searchQuery: string = '';
+  private timeoutId: any;
 
-  timeSlots: TimeSlot[] = [
-    { time: '09:00 ص', isBooked: true, patientName: ' يوسف مجدي' },
-    { time: '10:00 ص', isBooked: false },
-    { time: '11:00 ص', isBooked: true, patientName: ' محمد احمد' },
-    { time: '12:00 م', isBooked: false },
-    { time: '01:00 م', isBooked: false },
-    { time: '02:00 م', isBooked: true, patientName: ' حسام حسن' },
-  ];
+  ngOnInit() {
+    this.bookingForm = this.fb.group({
+      patientName: ['', [Validators.required, Validators.minLength(3)]],
+      selectedTime: ['', Validators.required],
+    });
+    this.loadAppointments();
+  }
 
-  get filteredAppointments() {
+    loadAppointments() {
+      this.appointmentService.getAppointments().subscribe((appointments) => {
+        this.timeSlots = this.baseTimes.map(time => {
+          const found = appointments.find(app => app.time === time);
+          return {
+            time: time,
+            isBooked: !!found,
+            patientName: found?.patientName
+          };
+        });
+        this.cdr.detectChanges();
+      });
+    }
+
+    get filteredAppointments() {
     let booked = this.timeSlots.filter((slot) => slot.isBooked);
-
     if (this.searchQuery) {
       booked = booked.filter((slot) => slot.patientName?.includes(this.searchQuery));
     }
@@ -44,47 +69,51 @@ export class PatientForm {
   }
 
   selectTime(time: string) {
-    this.selectedTime = time;
-  }
+      this.bookingForm.patchValue({ selectedTime: time });
+    }
 
   scheduleAppointment() {
-    this.showConfirmation = false;
     this.showisNameExists = false;
     this.showNameisRequired = false;
+this.showConfirmation = false;
 
-    if (!this.patientName || this.patientName.trim().length === 0) {
+
+    const rawName = this.bookingForm.get('patientName')?.value || '';
+    const trimmedName = rawName.trim();
+
+    if (this.bookingForm.invalid || trimmedName.length === 0) {
+      this.bookingForm.markAllAsTouched();
       this.showNameisRequired = true;
       return;
     }
-
-    const trimmedName = this.patientName.trim();
-    const isNameExists = this.timeSlots.some(
-      (slot) => slot.isBooked && slot.patientName === trimmedName,
-    );
+      const isNameExists = this.timeSlots.some(
+        (slot) => slot.isBooked && slot.patientName === trimmedName
+      );
 
     if (isNameExists) {
       this.showisNameExists = true;
+      this.bookingForm.patchValue({ patientName: '' });
       return;
     }
-    const slotIndex = this.timeSlots.findIndex((s) => s.time === this.selectedTime);
-    if (slotIndex !== -1) {
-      this.timeSlots[slotIndex].isBooked = true;
-      this.timeSlots[slotIndex].patientName = this.patientName.trim();
+
+      const newAppointment: Appointment = {
+        patientName: trimmedName,
+        time: this.bookingForm.value.selectedTime
+      };
+
+      this.appointmentService.addAppointment(newAppointment).subscribe(() => {
+        this.showConfirmation = true;
+        this.bookingForm.reset();
+        this.loadAppointments();
+
+        if (this.timeoutId) {
+          clearTimeout(this.timeoutId);
+        }
+
+        this.timeoutId = setTimeout(() => {
+          this.showConfirmation = false;
+          this.cdr.detectChanges();
+        }, 3000);
+      });
     }
-
-    this.showConfirmation = true;
-    this.patientName = '';
-    this.selectedTime = '';
-
-    if (this.timeoutId) {
-      clearTimeout(this.timeoutId);
-    }
-
-
-    this.timeoutId = setTimeout(() => {
-      this.showConfirmation = false;
-
-      this.cdr.detectChanges();
-    }, 3000);
   }
-}

@@ -24,9 +24,9 @@
   <div class="booking-section">
     <h3>حجز موعد جديد</h3>
 
-    <input [(ngModel)]="patientName" placeholder="اسم المريض..." type="text">
-    <p>الأسم: <strong class="highlight">{{ patientName }}</strong></p>
-
+    <form [formGroup]="bookingForm" >
+    <input formControlName ="patientName" placeholder="اسم المريض..." type="text">
+      <p>الأسم: <strong class="highlight">{{ bookingForm.get('patientName')?.value }}</strong></p>
     @if (showNameisRequired){
       <div class ="error-message" >
         الرجاء إدخال اسم المريض
@@ -45,7 +45,7 @@
         @for (slot of timeSlots; track slot.time) {
           <button
             (click)="selectTime(slot.time)"
-            [class.selected]="selectedTime === slot.time"
+            [class.selected]="bookingForm.get( 'selectedTime' )?.value=== slot.time"
             [disabled]="slot.isBooked"
             class="slot-btn">
             {{ slot.time }}
@@ -55,12 +55,13 @@
     </div>
 
     <button
+      type="button"
       (click)="scheduleAppointment()"
-      [disabled]="!patientName || !selectedTime"
+      [disabled]="bookingForm.invalid"
       class="submit-btn">
       حجز موعد
     </button>
-
+</form>
     @if (showConfirmation) {
       <div class="success-message">
         تم حجز الموعد بنجاح

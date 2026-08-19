@@ -1,0 +1,25 @@
+{
+  "appointments": [
+    {
+      "id": "1",
+      "time": "09:00 ص",
+      "patientName": "يوسف مجدي"
+    },
+    {
+      "id": "2",
+      "time": "11:00 ص",
+      "patientName": "محمد احمد"
+    },
+    {
+      "id": "3",
+      "time": "02:00 م",
+      "patientName": "حسام حسن"
+    },
+    {
+      "patientName": "aaa",
+      "time": "10:00 ص",
+      "id": "UpciYR31SJs"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
