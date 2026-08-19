@@ -16,7 +16,11 @@ interface TimeSlot {
 export class PatientForm {
   patientName: string = '';
   selectedTime: string = '';
+
   showConfirmation: boolean = false;
+  showisNameExists: boolean = false;
+  showNameisRequired: boolean = false;
+
   private timeoutId: any;
   constructor(private cdr: ChangeDetectorRef) {}
   searchQuery: string = '';
@@ -44,22 +48,22 @@ export class PatientForm {
   }
 
   scheduleAppointment() {
+    this.showConfirmation = false;
+    this.showisNameExists = false;
+    this.showNameisRequired = false;
+
     if (!this.patientName || this.patientName.trim().length === 0) {
-      alert('الرجاء إدخال اسم المريض');
+      this.showNameisRequired = true;
       return;
     }
 
-    if (!this.selectedTime) {
-      alert('الرجاء اختيار موعد');
-      return;
-    }
     const trimmedName = this.patientName.trim();
     const isNameExists = this.timeSlots.some(
-      (slot) => slot.isBooked && slot.patientName === trimmedName);
+      (slot) => slot.isBooked && slot.patientName === trimmedName,
+    );
 
     if (isNameExists) {
-      alert(`عفواً، المريض "${trimmedName}" لديه موعد محجوز بالفعل اليوم.`);
-      this.patientName = '';
+      this.showisNameExists = true;
       return;
     }
     const slotIndex = this.timeSlots.findIndex((s) => s.time === this.selectedTime);
@@ -76,10 +80,11 @@ export class PatientForm {
       clearTimeout(this.timeoutId);
     }
 
+
     this.timeoutId = setTimeout(() => {
       this.showConfirmation = false;
 
       this.cdr.detectChanges();
-    }, 2000);
+    }, 3000);
   }
 }

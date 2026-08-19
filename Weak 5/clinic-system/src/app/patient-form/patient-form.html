@@ -25,7 +25,19 @@
     <h3>حجز موعد جديد</h3>
 
     <input [(ngModel)]="patientName" placeholder="اسم المريض..." type="text">
-    <p>الاسم: <strong class="highlight">{{ patientName }}</strong></p>
+    <p>الأسم: <strong class="highlight">{{ patientName }}</strong></p>
+
+    @if (showNameisRequired){
+      <div class ="error-message" >
+        الرجاء إدخال اسم المريض
+      </div>
+    }
+
+    @if (showisNameExists){
+      <div class ="error-message" >
+        هذا المريض لديه موعد محجوز بالفعل
+      </div>
+    }
 
     <div class="time-slots-container">
       <p>اختر موعداً:</p>
