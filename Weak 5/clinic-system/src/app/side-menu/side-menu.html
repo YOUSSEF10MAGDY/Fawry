@@ -1,12 +1,7 @@
-<aside class="sidebar">
+<nav class="side-menu">
   <ul>
-    @for (item of menuItems; track item) {
-      <li>{{ item }}</li>
-    }
-
-    <li>
-      <a routerLink="/appointments" routerLinkActive="active">إدارة المواعيد والحجز</a>
-    </li>
-
+    <li><a routerLink="/booking" routerLinkActive="active">حجز موعد جديد</a></li>
+    <li><a routerLink="/appointments" routerLinkActive="active">مواعيد اليوم </a></li>
+    <li><a routerLink="/add-doctor" routerLinkActive="active">إضافة طبيب جديد</a></li>
   </ul>
-</aside>
+</nav>

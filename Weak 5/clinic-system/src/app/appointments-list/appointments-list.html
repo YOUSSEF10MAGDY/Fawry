@@ -1,0 +1,56 @@
+<div class="appointments-container">
+  <h3>مواعيد اليوم المحجوزة</h3>
+
+  <div class="filter-section">
+    <label>اختر الطبيب لعرض مواعيده:</label>
+    <select [(ngModel)]="selectedDoctorId" class="form-control">
+      <option value="">-- اضغط لاختيار الدكتور --</option>
+      @for (doc of doctors; track doc.id) {
+        <option [value]="doc.id">د. {{ doc.name }} ({{ doc.specialty }})</option>
+      }
+    </select>
+  </div>
+
+  @if (selectedDoctorId) {
+    <div class="table-responsive">
+      <table class="appointments-table">
+        <thead>
+        <tr>
+          <th>وقت الموعد</th>
+          <th>اسم المريض</th>
+          <th>الإجراءات</th>
+        </tr>
+        </thead>
+        <tbody>
+          @for (app of filteredAppointments; track app.id) {
+            <tr>
+              <td><span class="time-badge">{{ app.time }}</span></td>
+              <td>
+                @if (editingId === app.id) {
+                  <input [(ngModel)]="updatedPatientName" class="edit-input" type="text">
+                } @else {
+                  <span class="patient-name">{{ app.patientName }}</span>
+                }
+              </td>
+              <td>
+                @if (editingId === app.id) {
+                  <button (click)="saveEdit(app.id)" class="btn-save">حفظ</button>
+                  <button (click)="cancelEdit()" class="btn-cancel">إلغاء</button>
+                } @else {
+                  <button (click)="startEdit(app)" class="btn-edit">تعديل</button>
+                  <button (click)="deleteAppointment(app.id)" class="btn-delete">حذف</button>
+                }
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td class="no-data" colspan="3">لا توجد مواعيد محجوزة لهذا الطبيب اليوم.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  } @else {
+    <p class="hint-msg">الرجاء اختيار الدكتور من القائمة أعلاه لعرض المواعيد المرتبطة به.</p>
+  }
+</div>

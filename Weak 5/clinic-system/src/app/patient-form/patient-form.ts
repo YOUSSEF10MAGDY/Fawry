@@ -1,13 +1,12 @@
-import { Component, ChangeDetectorRef, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import {
-  FormsModule,
-  ReactiveFormsModule,
   FormBuilder,
   FormGroup,
-  Validators
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
-
-import { AppointmentService, Appointment } from './appointment';
+import { Appointment, AppointmentService, Doctor } from './appointment';
 
 interface TimeSlot {
   time: string;
@@ -17,66 +16,94 @@ interface TimeSlot {
 
 @Component({
   selector: 'app-patient-form',
-  imports: [FormsModule,ReactiveFormsModule],
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule],
   templateUrl: './patient-form.html',
   styleUrl: './patient-form.css',
 })
 export class PatientForm implements OnInit {
-  private fb = inject(FormBuilder);
-  private appointmentService = inject(AppointmentService);
-  private cdr = inject(ChangeDetectorRef);
-
   bookingForm!: FormGroup;
-
+  doctors: Doctor[] = [];
+  allAppointments: Appointment[] = [];
+  baseTimes = ['09:00 ص', '10:00 ص', '11:00 ص', '12:00 م', '01:00 م', '02:00 م'];
+  timeSlots: TimeSlot[] = [];
   showConfirmation: boolean = false;
   showisNameExists: boolean = false;
   showNameisRequired: boolean = false;
-
-  baseTimes = ['09:00 ص', '10:00 ص', '11:00 ص', '12:00 م', '01:00 م', '02:00 م'];
-  timeSlots: TimeSlot[] = [];
-
-  searchQuery: string = '';
+  private fb = inject(FormBuilder);
+  private appointmentService = inject(AppointmentService);
+  private cdr = inject(ChangeDetectorRef);
   private timeoutId: any;
 
   ngOnInit() {
     this.bookingForm = this.fb.group({
+      doctorId: ['', Validators.required],
       patientName: ['', [Validators.required, Validators.minLength(3)]],
       selectedTime: ['', Validators.required],
     });
-    this.loadAppointments();
-  }
 
-    loadAppointments() {
-      this.appointmentService.getAppointments().subscribe((appointments) => {
-        this.timeSlots = this.baseTimes.map(time => {
-          const found = appointments.find(app => app.time === time);
-          return {
-            time: time,
-            isBooked: !!found,
-            patientName: found?.patientName
-          };
-        });
-        this.cdr.detectChanges();
+    this.loadInitialData();
+    {
+      this.appointmentService.getDoctors().subscribe({
+        next: (docs) => {
+          this.doctors = docs;
+          this.cdr.detectChanges();
+        },
+        error: (err: any) => {
+          console.error(err);
+        },
+      });
+
+      this.appointmentService.getAppointments().subscribe({
+        next: (apps) => {
+          this.allAppointments = apps;
+          this.updateTimeSlotsForSelectedDoctor();
+          this.cdr.detectChanges();
+        },
+        error: (err: any) => {
+          console.error(err);
+        },
       });
     }
 
-    get filteredAppointments() {
-    let booked = this.timeSlots.filter((slot) => slot.isBooked);
-    if (this.searchQuery) {
-      booked = booked.filter((slot) => slot.patientName?.includes(this.searchQuery));
-    }
-    return booked;
+    this.bookingForm.get('doctorId')?.valueChanges.subscribe(() => {
+      this.updateTimeSlotsForSelectedDoctor();
+    });
+  }
+
+  loadInitialData() {
+    this.appointmentService.getDoctors().subscribe((docs) => {
+      this.doctors = docs;
+    });
+
+    this.appointmentService.getAppointments().subscribe((apps) => {
+      this.allAppointments = apps;
+    });
+  }
+
+  updateTimeSlotsForSelectedDoctor() {
+    const selectedDocId = this.bookingForm.get('doctorId')?.value;
+    const doctorAppointments = this.allAppointments.filter((app) => app.doctorId === selectedDocId);
+
+    this.timeSlots = this.baseTimes.map((time) => {
+      const found = doctorAppointments.find((app) => app.time === time);
+      return {
+        time: time,
+        isBooked: !!found,
+        patientName: found?.patientName,
+      };
+    });
+    this.cdr.detectChanges();
   }
 
   selectTime(time: string) {
-      this.bookingForm.patchValue({ selectedTime: time });
-    }
+    this.bookingForm.patchValue({ selectedTime: time });
+  }
 
   scheduleAppointment() {
     this.showisNameExists = false;
     this.showNameisRequired = false;
-this.showConfirmation = false;
-
+    this.showConfirmation = false;
 
     const rawName = this.bookingForm.get('patientName')?.value || '';
     const trimmedName = rawName.trim();
@@ -86,34 +113,39 @@ this.showConfirmation = false;
       this.showNameisRequired = true;
       return;
     }
-      const isNameExists = this.timeSlots.some(
-        (slot) => slot.isBooked && slot.patientName === trimmedName
-      );
+
+    const selectedDocId = this.bookingForm.get('doctorId')?.value;
+    const selectedTime = this.bookingForm.get('selectedTime')?.value;
+
+    const isNameExists = this.timeSlots.some(
+      (slot) => slot.isBooked && slot.patientName === trimmedName,
+    );
 
     if (isNameExists) {
       this.showisNameExists = true;
-      this.bookingForm.patchValue({ patientName: '' });
       return;
     }
 
-      const newAppointment: Appointment = {
-        patientName: trimmedName,
-        time: this.bookingForm.value.selectedTime
-      };
+    const newAppointment: Appointment = {
+      patientName: trimmedName,
+      doctorId: selectedDocId,
+      time: selectedTime,
+    };
 
-      this.appointmentService.addAppointment(newAppointment).subscribe(() => {
-        this.showConfirmation = true;
-        this.bookingForm.reset();
-        this.loadAppointments();
+    this.appointmentService.addAppointment(newAppointment).subscribe(() => {
+      this.showConfirmation = true;
+      this.bookingForm.reset();
 
-        if (this.timeoutId) {
-          clearTimeout(this.timeoutId);
-        }
-
-        this.timeoutId = setTimeout(() => {
-          this.showConfirmation = false;
-          this.cdr.detectChanges();
-        }, 3000);
+      this.appointmentService.getAppointments().subscribe((apps) => {
+        this.allAppointments = apps;
+        this.updateTimeSlotsForSelectedDoctor();
       });
-    }
+
+      if (this.timeoutId) clearTimeout(this.timeoutId);
+      this.timeoutId = setTimeout(() => {
+        this.showConfirmation = false;
+        this.cdr.detectChanges();
+      }, 3000);
+    });
   }
+}

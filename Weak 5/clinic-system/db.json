@@ -1,24 +1,27 @@
 {
-  "appointments": [
+  "doctors": [
     {
       "id": "1",
-      "time": "09:00 ص",
-      "patientName": "يوسف مجدي"
+      "name": "أحمد محمد",
+      "specialty": "أسنان"
     },
     {
       "id": "2",
-      "time": "11:00 ص",
-      "patientName": "محمد احمد"
+      "name": "محمود علي",
+      "specialty": "أطفال"
     },
     {
       "id": "3",
-      "time": "02:00 م",
-      "patientName": "حسام حسن"
-    },
+      "name": "سارة خالد",
+      "specialty": "باطنة"
+    }
+  ],
+  "appointments": [
     {
-      "patientName": "aaa",
+      "patientName": "يوسف مجدي",
+      "doctorId": "1",
       "time": "10:00 ص",
-      "id": "UpciYR31SJs"
+      "id": "SQ0f2iR3Ygc"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

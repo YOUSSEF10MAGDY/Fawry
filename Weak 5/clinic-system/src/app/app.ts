@@ -1,15 +1,13 @@
-import { Component, signal } from '@angular/core';
-import { Header } from './header/header';
-import { SideMenu } from './side-menu/side-menu';
-import { PatientForm } from './patient-form/patient-form';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { Header } from './header/header';
+import { SideMenuComponent } from './side-menu/side-menu';
 
 @Component({
   selector: 'app-root',
-  imports: [Header, SideMenu, PatientForm, RouterOutlet],
+  standalone: true,
+  imports: [RouterOutlet, Header, SideMenuComponent],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App {
-  protected readonly title = signal('clinic-system');
-}
+export class App {}

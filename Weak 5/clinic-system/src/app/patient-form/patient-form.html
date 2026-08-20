@@ -1,72 +1,62 @@
-<div class="dashboard-grid">
+<div class="booking-container">
+  <h3>حجز موعد جديد</h3>
 
-  <div class="appointments-section">
-    <h3>مواعيد اليوم </h3>
-    <input
-      [(ngModel)]="searchQuery"
-      class="search-input"
-      placeholder=" ابحث عن مريض..."
-      type="text">
+  <form [formGroup]="bookingForm">
 
-    <ul class="appointments-list">
-      @for (slot of filteredAppointments; track slot.time) {
-        <li>
-          <span class="patient-name">{{ slot.patientName }}</span>
-          <span class="time-badge">{{ slot.time }}</span>
-        </li>
-      } @empty {
-        <li class="empty-state">لا يوجد مرضى بهذا الاسم</li>
+    <div class="form-group">
+      <label>اختر الطبيب:</label>
+      <select class="form-control" formControlName="doctorId">
+        <option disabled value="">-- اضغط لاختيار الدكتور --</option>
+        @for (doc of doctors; track doc.id) {
+          <option [value]="doc.id">د. {{ doc.name }} ({{ doc.specialty }})</option>
+        }
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>اسم المريض:</label>
+      <input class="form-control" formControlName="patientName" placeholder="اكتب اسم المريض هنا..." type="text">
+
+      @if (showNameisRequired) {
+        <div class="error-message">الرجاء إدخال اسم صحيح للمريض</div>
       }
-    </ul>
-  </div>
-
-
-  <div class="booking-section">
-    <h3>حجز موعد جديد</h3>
-
-    <form [formGroup]="bookingForm" >
-    <input formControlName ="patientName" placeholder="اسم المريض..." type="text">
-      <p>الأسم: <strong class="highlight">{{ bookingForm.get('patientName')?.value }}</strong></p>
-    @if (showNameisRequired){
-      <div class ="error-message" >
-        الرجاء إدخال اسم المريض
-      </div>
-    }
-
-    @if (showisNameExists){
-      <div class ="error-message" >
-        هذا المريض لديه موعد محجوز بالفعل
-      </div>
-    }
+      @if (showisNameExists) {
+        <div class="error-message">هذا المريض لديه موعد محجوز بالفعل مع هذا الطبيب</div>
+      }
+    </div>
 
     <div class="time-slots-container">
-      <p>اختر موعداً:</p>
+      <label>الأوقات المتاحة:</label>
       <div class="slots-grid">
         @for (slot of timeSlots; track slot.time) {
           <button
             (click)="selectTime(slot.time)"
-            [class.selected]="bookingForm.get( 'selectedTime' )?.value=== slot.time"
-            [disabled]="slot.isBooked"
-            class="slot-btn">
+            [class.selected]="bookingForm.get('selectedTime')?.value === slot.time"
+            [disabled]="slot.isBooked || !bookingForm.get('doctorId')?.value"
+            class="slot-btn"
+            type="button">
             {{ slot.time }}
+            @if (slot.isBooked) {
+              <span class="booked-tag">محجوز</span>
+            }
           </button>
+        } @empty {
+          <p class="hint">الرجاء اختيار الدكتور أولاً لعرض المواعيد المتاحة</p>
         }
       </div>
     </div>
 
     <button
-      type="button"
       (click)="scheduleAppointment()"
       [disabled]="bookingForm.invalid"
-      class="submit-btn">
-      حجز موعد
+      class="submit-btn"
+      type="button">
+      تأكيد وحجز الموعد
     </button>
-</form>
-    @if (showConfirmation) {
-      <div class="success-message">
-        تم حجز الموعد بنجاح
-      </div>
-    }
-  </div>
 
+  </form>
+
+  @if (showConfirmation) {
+    <div class="success-message">تم حجز الموعد بنجاح!</div>
+  }
 </div>
